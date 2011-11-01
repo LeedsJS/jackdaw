@@ -18,6 +18,13 @@ Here's what we're shooting for:
 Remember, the point is to learn. For that reason we're not adopting an existing game framework initially. We *want* to reinvent the wheel, because only by making something do you really understand it. 
 That's not to say we have to write every line of code ourselves. We are free to adopt and borrow implementations as we need them, once we understand the need, the problem they solve and how the solve it.
 
+Contributing
+------------
+
+Get yourself a github account and fork the master branch of the project. Pick a task, bug or other deficiency and go to work. 
+Please use the IRC #leedsjs channel on freenode, and the [leedsjs google group](http://groups.google.com/group/leedsjs) for discussion, commit often to your own fork and send a pull request when you have something that's not totally broken. 
+This is *not* a code-off or competition. Relax, ask questions, have fun and share. 
+
 Status
 ------
 
