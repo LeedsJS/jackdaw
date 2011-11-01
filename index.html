@@ -19,9 +19,9 @@
 	<script>
 		require([
 			'index'
-		]).then(function(jackdaw){
-			var j = jackdaw; 
-			j.start({
+		]).then(function(game){
+			window.game = game;
+			game.start({
 				canvasNode: 'stage'
 			});
 		})
