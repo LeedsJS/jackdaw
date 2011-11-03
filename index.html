@@ -14,7 +14,7 @@
     }
     #container {
       margin: 0 auto;
-      width: 700px;
+      width: 42em;
     }
     h1 { font-size: 3.8em; color: #111111; margin-bottom: 3px; }
     h1 .small { font-size: 0.4em; }
@@ -22,11 +22,25 @@
     h2 { font-size: 1.5em; color: #111111; }
     h3 { text-align: center; color: #111111; }
     a { color: #111111; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+    .description { 
+        font-size: 2.2em; margin-bottom: 30px; margin-top: 30px;
+        letter-spacing: 2pt;
+        line-height: 1.6em;
+        margin-left: -16px;
+        border: double #ccc;
+        padding: 8px 12px;
+    }
     .download { float: right; }
     pre { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
+
+    .download {
+        display: none;
+    }
+    .download.released {
+        display: block;
+    }
   </style>
 </head>
 
@@ -46,14 +60,8 @@
       <span class="small">by <a href="https://github.com/sfoster">sfoster</a></span></h1>
 
     <div class="description">
-      Collaboratively developed game project for LeedsJs
+      Collaboratively developed game project for <a href="http://leedsjs.org/">LeedsJs</a>
     </div>
-
-    
-
-    
-
-    
 
     
       <h2>License</h2>
@@ -62,13 +70,17 @@
 
     
       <h2>Authors</h2>
-      <p>Sam Foster (sam@sam-i-am.com)<br/>      </p>
+      <p>Sam Foster (sam@sam-i-am.com)
+<br/>      </p>
     
 
     
-      <h2>Contact</h2>
-      <p>Sam Foster (sam@sam-i-am.com)<br/>      </p>
-    
+    <h2>Contact</h2>
+      <ul>
+          <li><a href="http://twitter.com/leedsjs">@leedsjs</a> on Twitter</li>
+          <li>#leedsjs on freenode IRC</li>
+          <li><a href="http://groups.google.com/group/leedsjs">LeedsJs discussion group</a></li>
+      </ul>
 
     <h2>Download</h2>
     <p>
