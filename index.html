@@ -8,6 +8,7 @@
 <body>
 	<h1>Jackdaw</h1>
 	<canvas id="stage" width="800" height="400"></canvas>
+	<div id="elapsed">not started</div>
 	<script>
 	// configure curl
 		curl = {
@@ -18,12 +19,24 @@
 	<script src="./lib/curl.js"></script>
 	<script>
 		require([
-			'index'
-		]).then(function(game){
+			'index', 'dom'
+		]).then(function(game, dom){
 			window.game = game;
+			var sinceNode = dom.byId("elapsed");
 			game.start({
-				canvasNode: 'stage'
+				canvasNode: dom.byId('stage')
+			}).then(function(){
+				console.log("and we're off...");
 			});
+			
+			game.listen("update", function(time){
+				sinceNode.innerHTML = time.toString();
+			})
+			
+			setTimeout(function(){
+				// load assets, then
+				game.emit("loaded");
+			}, 500);
 		})
 	</script>
 </body>

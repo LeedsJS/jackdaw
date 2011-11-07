@@ -12,6 +12,11 @@ body, html {
 	margin: 1.5em auto;
 	background-color: #fff;
 }
+#elapsed {
+	display: block;
+	margin: 1.5em auto;
+	width: 800px;
+}
 
 h1 {
 	position: fixed;
