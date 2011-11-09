@@ -10,7 +10,8 @@
 			baseUrl: '../lib',
 			pluginPath: '../lib/amd',
 			paths: {
-				curl: 'curl/src/curl'
+				curl: 'curl/src/curl',
+				tests: '../tests'
 			}
 		}
 	</script>
@@ -18,9 +19,9 @@
 	<script>
 		var now = +new Date;
 		require([
-			'image!../tests/resources/icon.png',
-			'image!../tests/resources/icon.png?' + now,
-			'image!../tests/resources/notthere.png'
+			'image!tests/resources/icon.png',
+			'image!tests/resources/icon.png?' + now,
+			'image!tests/resources/notthere.png'
 		], function(img1, img2, errImage){
 			console.log("require callback: ", arguments);
 		}); 
