@@ -35,7 +35,9 @@
 			});
 			
 			game.listen("update", function(time){
-				sinceNode.innerHTML = time.toString();
+				sinceNode.innerHTML = "delta: ${dt}, now: ${ts}".replace(/\$\{([^\}]+)\}/g, function(m, p){
+					return time[p];
+				});
 			})
 			
 			setTimeout(function(){
