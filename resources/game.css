@@ -1,0 +1,27 @@
+/**
+  * game.css
+  * 	game scoped styles
+ */
+
+body, html {
+	background-color: #eee;
+	margin: 0; padding: 0;
+}
+#stage {
+	display: block;
+	margin: 1.5em auto;
+	background-color: #fff;
+}
+#elapsed {
+	display: block;
+	margin: 1.5em auto;
+	width: 800px;
+}
+
+h1 {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	margin: 0 0 0 -400px;
+	font-size: 1em;
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Jackdaw</title>
+	<link rel="stylesheet" type="text/css" href="./resources/game.css">
+</head>
+<body>
+	<h1>Jackdaw</h1>
+	<canvas id="stage" width="800" height="400"></canvas>
+	<div id="elapsed">not started</div>
+	<script>
+	// configure curl
+		curl = {
+			apiName: 'require',
+			baseUrl: './lib',
+			pluginPath: '../lib/amd',
+			paths: {
+				curl: 'curl/src/curl'
+			}
+		}
+	</script>
+	<script src="./lib/curl/src/curl.js"></script>
+	<script>
+		require([
+			'index', 'dom'
+		]).then(function(game, dom){
+			window.game = game;
+			var sinceNode = dom.byId("elapsed");
+			game.start({
+				canvasNode: dom.byId('stage')
+			}).then(function(){
+				console.log("and we're off...");
+			});
+			
+			game.listen("update", function(time){
+				sinceNode.innerHTML = time.toString();
+			})
+			
+			setTimeout(function(){
+				// load assets, then
+				game.emit("loaded");
+			}, 500);
+		})
+	</script>
+</body>
+</html>
