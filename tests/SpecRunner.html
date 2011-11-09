@@ -15,10 +15,12 @@
 		curl = {
 			apiName: 'require',
 			baseUrl: '../lib',
-			pluginPath: '../lib/amd'
+			paths: {
+				curl: 'curl/src/curl'
+			}
 		}
 	</script>
-	<script src="../lib/curl.js"></script>
+	<script src="../lib/curl/src/curl.js"></script>
 	<script>
 		require([
 			'domReady!',

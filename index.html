@@ -13,10 +13,13 @@
 	// configure curl
 		curl = {
 			apiName: 'require',
-			baseUrl: './lib'
+			baseUrl: './lib',
+			paths: {
+				curl: 'curl/src/curl'
+			}
 		}
 	</script>
-	<script src="./lib/curl.js"></script>
+	<script src="./lib/curl/src/curl.js"></script>
 	<script>
 		require([
 			'index', 'dom'
