@@ -31,7 +31,7 @@
 			game.start({
 				canvasNode: dom.byId('stage')
 			}).then(function(){
-				console.log("and we're off...");
+				game.emit('log', "and we're off...");
 			});
 			
 			game.listen("update", function(time){
