@@ -1,50 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Jackdaw</title>
-	<link rel="stylesheet" type="text/css" href="./resources/game.css">
+  <meta charset="utf-8">
+  <title>Jackdaw</title>
+  <link rel="stylesheet" type="text/css" href="./resources/game.css">
 </head>
 <body>
-	<h1>Jackdaw</h1>
-	<canvas id="stage" width="800" height="400"></canvas>
-	<div id="elapsed">not started</div>
-	<script>
-	// configure curl
-		curl = {
-			apiName: 'require',
-			baseUrl: './lib',
-			pluginPath: '../lib/amd',
-			paths: {
-				curl: 'curl/src/curl',
-				tests: '../tests'
-			}
-		}
-	</script>
-	<script src="./lib/curl/src/curl.js"></script>
-	<script>
-		require([
-			'index', 'dom'
-		]).then(function(game, dom){
-			window.game = game;
-			var sinceNode = dom.byId("elapsed");
-			game.start({
-				canvasNode: dom.byId('stage')
-			}).then(function(){
-				game.emit('log', "and we're off...");
-			});
-			
-			game.listen("update", function(time){
-				sinceNode.innerHTML = "delta: ${dt}, now: ${ts}".replace(/\$\{([^\}]+)\}/g, function(m, p){
-					return time[p];
-				});
-			})
-			
-			setTimeout(function(){
-				// load assets, then
-				game.emit("loaded");
-			}, 500);
-		})
-	</script>
+  <h1>Jackdaw</h1>
+  <canvas id="stage" width="800" height="400"></canvas>
+  <div id="elapsed">not started</div>
+  <script>
+  // configure curl
+    curl = {
+      apiName: 'require',
+      baseUrl: './lib',
+      pluginPath: '../lib/amd',
+      paths: {
+        curl: 'curl/src/curl',
+        tests: '../tests'
+      }
+    }
+  </script>
+  <script src="./lib/curl/src/curl.js"></script>
+  <script>
+    require([
+      'index', 'dom'
+    ]).then(function(game, dom){
+      window.game = game;
+      var sinceNode = dom.byId("elapsed");
+      game.start({
+        canvasNode: dom.byId('stage')
+      }).then(function(){
+        game.emit('log', "and we're off...");
+      });
+      
+      game.listen("update", function(time){
+        sinceNode.innerHTML = "delta: ${dt}, now: ${ts}".replace(/\$\{([^\}]+)\}/g, function(m, p){
+          return time[p];
+        });
+      })
+      
+      setTimeout(function(){
+        // load assets, then
+        game.emit("loaded");
+      }, 500);
+    })
+  </script>
 </body>
 </html>
