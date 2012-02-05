@@ -19,14 +19,15 @@
 				curl: 'curl/src/curl',
 				tests: '../tests'
 			}
-		}
+		};
 	</script>
 	<script src="../lib/curl/src/curl.js"></script>
 	<script>
 		require([
 			'domReady!',
 			// include spec files here
-			'tests/spec/smokeSpec'
+			'tests/spec/smokeSpec',
+			'tests/spec/componentEntitySpec'
 		], function(){
 			var jasmineEnv = jasmine.getEnv();
 			jasmineEnv.updateInterval = 1000;

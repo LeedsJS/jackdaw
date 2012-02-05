@@ -1,11 +1,24 @@
-define(['lib/components', 'lib/entity'], function(componentRegistry, Entity){
+define(['components', 'entity'], function(componentRegistry, Entity){
 
 	describe("component registry", function() {
-
+    var registerException = null;
+    // registry is (currently) just a plain dictionary object
+    try {
+      componentRegistry['testComponent'] = { name: 'testComponent' };
+    } catch(e) {
+      registerException = e;
+    }
+    
 		it("should allow a component to be registered", function() {
+			expect(registerException).toBe(null);
 		});
 
 		it("should return a registered component given its name", function() {
+		  var comp = componentRegistry['testComponent']; 
+		  
+			expect(comp).toBeTruthy();
+			expect(comp.name).toBe('testComponent');
+		  
 		});
 
   });
@@ -13,15 +26,22 @@ define(['lib/components', 'lib/entity'], function(componentRegistry, Entity){
 	describe("entity is a class", function() {
 
 		it("should be a function", function() {
+		  expect(typeof Entity).toBe('function');
 		});
 
 		it("should create instances", function() {
+		  var ent = new Entity();
+		  expect(ent instanceof Entity).toBeTruthy();
 		});
 
 		it("should accept a list of components", function() {
+		  var ent = new Entity('c1, c2');
+		  expect(ent.components.length).toBe(2);
 		});
 
 		it("should throw on bogus or unregistered components", function() {
+		  var ent = new Entity('c1, c2');
+		  expect(function () { ent.init(); }).toThrow('entity init: no component registered as c1');
 		});
 
 	});
