@@ -148,5 +148,43 @@ define(['components', 'entity', 'component'], function(componentRegistry, Entity
 
   });
 
+  describe("entity lifecyle method", function() {
+    beforeEach(function(){
+      componentRegistry.empty();
+      var c1 = new Component({
+        increment: 2,
+        name: 'c1',
+        attach: function(ent) {
+          ent.count = 0;
+        },
+        update: function(ent){
+          ent.count += this.increment;
+        }
+      }); 
+      var c2 = new Component({
+        name: 'c2',
+        attach: function(ent) {
+          ent.description = "Some words";
+        },
+        update: function(ent){
+          ent.description = "Next words";
+        }
+      }); 
+    });
+    
+    it("should call attached component methods", function(){
+      var ent = new Entity("c1, c2");
+      ent.init();
+      expect(ent.count).toBe(0);
+      expect(ent.description).toBe("Some words");
+
+      ent.update();
+      expect(ent.count).toBe(2);
+      expect(ent.description).toBe("Next words");
+
+    });
+
+  });
+
   
 });
