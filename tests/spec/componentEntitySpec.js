@@ -1,29 +1,51 @@
 define(['components', 'entity', 'component'], function(componentRegistry, Entity, Component){
 
+  
   describe("component registry", function() {
-    var registerException = null;
-    // registry is (currently) just a plain dictionary object
-    try {
-      componentRegistry['testComponent'] = { name: 'testComponent' };
-    } catch(e) {
-      registerException = e;
-    }
+    beforeEach(function(){
+      componentRegistry.empty();
+    });
     
     it("should allow a component to be registered", function() {
+      var registerException = null;
+      // registry is (currently) just a plain dictionary object
+      try {
+        componentRegistry.register({ name: 'testComponent' });
+      } catch(e) {
+        registerException = e;
+      }
+
       expect(registerException).toBe(null);
     });
 
     it("should return a registered component given its name", function() {
-      var comp = componentRegistry['testComponent']; 
+      componentRegistry.register({ name: 't2' });
+      var comp = componentRegistry.get('t2'); 
       
       expect(comp).toBeTruthy();
-      expect(comp.name).toBe('testComponent');
+      expect(comp.name).toBe('t2');
       
     });
 
+    it("should empty itself cleanly", function() {
+      componentRegistry
+        .register({ name: 'r1'})
+        .register({ name: 'r2'}); 
+      
+      expect(componentRegistry.get('r1')).toBeTruthy();
+      expect(componentRegistry.get('r2')).toBeTruthy();
+      
+      componentRegistry.empty();
+      
+      expect(componentRegistry.get('r1')).toBeFalsy();
+      expect(componentRegistry.get('r2')).toBeFalsy();
+    });
   });
 
   describe("entity is a class", function() {
+    beforeEach(function(){
+      componentRegistry.empty();
+    });
 
     it("should be a function", function() {
       expect(typeof Entity).toBe('function');
@@ -46,15 +68,11 @@ define(['components', 'entity', 'component'], function(componentRegistry, Entity
 
   });
 
-  describe("entity init", function() {
-
-    it("should call all components with the instance", function(){
-      
+  describe("component", function() {
+    beforeEach(function(){
+      componentRegistry.empty();
     });
 
-  });
-
-  describe("component", function() {
     it("should throw without a name property", function(){
       expect(function(){
         var c = new Component({});
@@ -63,9 +81,9 @@ define(['components', 'entity', 'component'], function(componentRegistry, Entity
         var c = new Component();
       }).toThrow();
     });
-    it("should have an init method", function(){
+    it("should have an attach method", function(){
       var c = new Component({ name: 'c1' });
-      expect(typeof c.init).toBe('function');
+      expect(typeof c.attach).toBe('function');
     });
     it("can implement key lifcycle methods", function(){
       var render = function(ent){};
@@ -75,7 +93,60 @@ define(['components', 'entity', 'component'], function(componentRegistry, Entity
       });
       expect(c.render).toBe(render);
       expect(typeof c.update).toBe('function');
-    
+    });
+
+    it("attaches and detaches cleanly", function(){
+      var c = new Component({ 
+        name: 'attachDetach',  
+        attach: function(ent){
+          ent.someProperty = 10;
+        },
+        detach: function(ent){
+          ent.someProperty = 0;
+        }
+      });
+      var ent1 = new Entity('attachDetach').init();
+      var ent2 = new Entity('attachDetach').init();
+      
+      expect(ent1.someProperty).toBe(10);
+      expect(ent2.someProperty).toBe(10);
+      expect(ent1.components.indexOf('attachDetach')).toBeGreaterThan(-1);
+      expect(ent2.components.indexOf('attachDetach')).toBeGreaterThan(-1);
+
+      // remove component from just the first entity
+      ent1.removeComponent('attachDetach');
+      
+      expect(ent1.components.indexOf('attachDetach')).toBe(-1);
+      expect(ent1.someProperty).toBe(0);
+      expect(ent2.someProperty).toBe(10);
     });
   });
+  
+  describe("entity init", function() {
+    beforeEach(function(){
+      componentRegistry.empty();
+      var c1 = new Component({
+        name: 'c1',
+        attach: function(ent) {
+          ent.c1_init = true;
+        }
+      }); 
+      var c2 = new Component({
+        name: 'c2',
+        attach: function(ent) {
+          ent.c2_init = true;
+        }
+      }); 
+    });
+    
+    it("should call all components with the instance", function(){
+      var ent = new Entity("c1, c2");
+      ent.init();
+      expect(ent.c1_init).toBeTruthy();
+      expect(ent.c2_init).toBeTruthy();
+    });
+
+  });
+
+  
 });
