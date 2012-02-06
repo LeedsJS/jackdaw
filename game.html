@@ -27,12 +27,30 @@
       'index', 'dom'
     ]).then(function(game, dom){
       window.game = game;
+      
+      function parseQueryString(str) {
+        var pairs = str.split(/&/), 
+            params = {},
+            nv = null;
+        while((nv = pairs.shift())) {
+          nv = nv.split('='); 
+          params[nv[0]] = nv[1];
+        }
+        return params;
+      }
+      var config = parseQueryString(location.search ? location.search.substring(1) : "");
+      console.log("Config: ", config);
+      return;
+      
       var startLevel = location.search && location.search.replace(/^.*level=(\w+)/, "$1");
       var sinceNode = dom.byId("elapsed");
-      game.start({
+      
+      var gameParams = lang.mixin({
         startLevel: startLevel || undefined,
         canvasNode: dom.byId('stage')
-      }).then(function(){
+      }, config);
+
+      game.start( gameParams ).then(function(){
         game.emit('log', "and we're off...");
       });
       
