@@ -24,8 +24,8 @@
   <script src="./lib/curl/src/curl.js"></script>
   <script>
     require([
-      'index', 'dom'
-    ]).then(function(game, dom){
+      'index', 'dom', 'lang'
+    ]).then(function(game, dom, lang){
       window.game = game;
       
       function parseQueryString(str) {
@@ -38,19 +38,14 @@
         }
         return params;
       }
-      var config = parseQueryString(location.search ? location.search.substring(1) : "");
-      console.log("Config: ", config);
-      return;
       
-      var startLevel = location.search && location.search.replace(/^.*level=(\w+)/, "$1");
-      var sinceNode = dom.byId("elapsed");
+      var sinceNode = dom.byId("elapsed"), 
+          qsConfig = parseQueryString(location.search ? location.search.substring(1) : ""),
+          gameConfig = lang.mixin({
+            canvasNode: dom.byId('stage')
+          }, qsConfig);
       
-      var gameParams = lang.mixin({
-        startLevel: startLevel || undefined,
-        canvasNode: dom.byId('stage')
-      }, config);
-
-      game.start( gameParams ).then(function(){
+      game.start( gameConfig ).then(function(){
         game.emit('log', "and we're off...");
       });
       
