@@ -33,12 +33,15 @@
 
       console.log("require callback: ", ctx);
       
+      // define some properties that all the states will share
       var commonState = { img: spriteSheet, w: 16, h: 18, offsetx: 0, frames: 3, interval: 120 };
       var playerSprite = new Sprite({
         name: 'playerSprite',
         state: {
           walkup: lang.mixin(Object.create(commonState), {
-            name: 'walkup', offsety: 180, 
+            name: 'walkup', 
+            offsety: 180, // the offset from the top of the sprite sheet for this sequence
+                          // animation frames are drawn horizontally, left to right
           }),
           walkright: lang.mixin(Object.create(commonState), {
             name: 'walkright', offsety: 198
@@ -54,17 +57,23 @@
           })
         }
       });
+      // make a new Entity with the playerSprite component we defined
       var ent = window.player = new Entity("playerSprite", {
-        spriteState: 'standing',
-        name: 'player',
-        x: 10, y: 50, width: 32, height: 36,
+        spriteState: 'standing',    // the initial state. Maybe sprite-state and other states can be combined?
+        name: 'player',             // the name of this entity
+        x: 10, y: 50, width: 32, height: 36,    // initial position/dimensions
+        
+        // render will get called after every update
         render: function(ctx){
+          // normally the entity's render wouldn't clear the canvas, this is just for this test/demo
           ctx.clearRect( 0, 0, canvas.width, canvas.height );
 
           var ent = this, 
               sprite = this.sprite, 
-              animFrame = this.spriteFrame, 
+              animFrame = this.spriteFrameIdx, 
               img = sprite.img;
+          // prepare the args to drawImage that will paint the character using
+          // the current frame in the current animation
           var drawArgs = [    
               img,                                            // image
               sprite.offsetx + (animFrame * sprite.w),        // source-x
