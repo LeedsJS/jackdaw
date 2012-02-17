@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Test Sprites</title>
+  <script>
+  // configure curl
+    curl = {
+      apiName: 'require',
+      baseUrl: '../lib',
+      pluginPath: '../lib/amd',
+      paths: {
+        curl: 'curl/src/curl',
+        tests: '../tests',
+        domReady: 'curl/src/curl/plugin/domReady'
+      }
+    };
+  </script>
+  <script src="../lib/curl/src/curl.js"></script>
+  <script>
+    var now = +new Date;
+    require([
+      'lang',
+      'dom',
+      'sprite',
+      'entity',
+      'image!../resources/charsets.png',
+      'domReady!'
+    ], function(lang, dom, Sprite, Entity, spriteSheet){
+
+      var canvas = document.getElementById('stage'),
+          ctx = canvas.getContext("2d");
+
+      console.log("require callback: ", ctx);
+      
+      var commonState = { img: spriteSheet, w: 16, h: 18, offsetx: 0, frames: 3, interval: 120 };
+      var playerSprite = new Sprite({
+        name: 'playerSprite',
+        state: {
+          walkup: lang.mixin(Object.create(commonState), {
+            name: 'walkup', offsety: 180, 
+          }),
+          walkright: lang.mixin(Object.create(commonState), {
+            name: 'walkright', offsety: 198
+          }),
+          walkdown: lang.mixin(Object.create(commonState), {
+            name: 'walkdown', offsety: 216
+          }),
+          walkleft: lang.mixin(Object.create(commonState), {
+            name: 'walkleft', offsety: 234
+          }),
+          standing: lang.mixin(Object.create(commonState), {
+            name: 'standing', offsety: 216, frames: 1
+          })
+        }
+      });
+      var ent = window.player = new Entity("playerSprite", {
+        spriteState: 'standing',
+        name: 'player',
+        x: 10, y: 50, width: 32, height: 36,
+        render: function(ctx){
+          ctx.clearRect( 0, 0, canvas.width, canvas.height );
+
+          var ent = this, 
+              sprite = this.sprite, 
+              animFrame = this.spriteFrame, 
+              img = sprite.img;
+          var drawArgs = [    
+              img,                                            // image
+              sprite.offsetx + (animFrame * sprite.w),        // source-x
+              sprite.offsety,                                 // source-y
+              sprite.w,                                       // source-width
+              sprite.h,                                       // source-height
+              ent.x,                                          // dest-x
+              ent.y,                                          // dest-y
+              ent.width,                                      // dest-width
+              ent.height                                      // dest-height
+          ];
+          // console.log("image,srcX,srcY,srcW,srcH,destX,destY,destW,destH");
+          // console.log(drawArgs);
+          ctx.drawImage.apply(ctx, drawArgs);
+        }
+      });
+      
+      ent.init();
+      ent.update();
+      ent.render(ctx);
+
+      window.moveUp = function(){
+        player.spriteState = 'walkup';
+        player.y -= 2;
+        player.update();
+        player.render(ctx);
+      };
+      window.moveDown = function(){
+        player.spriteState = 'walkdown';
+        player.y += 2;
+        player.update();
+        player.render(ctx);
+      };
+      window.moveRight = function(){
+        player.spriteState = 'walkright';
+        player.x += 2;
+        player.update();
+        player.render(ctx);
+      };
+      window.moveLeft = function(){
+        player.spriteState = 'walkleft';
+        player.x -= 2;
+        player.update();
+        player.render(ctx);
+      };
+      window.stopMoving = function(){
+        player.spriteState = 'standing';
+        player.update();
+        player.render(ctx);
+      };
+      
+      var sequence = ['moveRight', 'moveDown', 'moveLeft', 'moveUp', 'stopMoving'], 
+          pointer = 0, 
+          lastTick = +new Date(), 
+          stepTime = lastTick;
+      function tick(){
+        var now = +new Date();
+        if(now - stepTime >= 2000) {
+          pointer = (pointer >= sequence.length-1) ? 0 : pointer+1;
+          stepTime = now;
+        }
+        window[sequence[pointer]]();
+        lastTick = now;
+      }
+      var itv = window.itv = setInterval(tick, 1000/30);
+    }); 
+    
+  </script>
+</head>
+
+<body>
+
+  <canvas id="stage" width="800" height="400"></canvas>
+
+</body>
+</html>
