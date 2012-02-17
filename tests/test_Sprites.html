@@ -11,23 +11,12 @@
       pluginPath: '../lib/amd',
       paths: {
         curl: 'curl/src/curl',
-        tests: '../tests'
+        tests: '../tests',
+        domReady: 'curl/src/curl/plugin/domReady'
       }
     };
   </script>
   <script src="../lib/curl/src/curl.js"></script>
-  <script>
-  // configure curl
-    curl = {
-      apiName: 'require',
-      baseUrl: './lib',
-      pluginPath: '../lib/amd',
-      paths: {
-        curl: 'curl/src/curl',
-        tests: '../tests'
-      }
-    };
-  </script>
   <script>
     var now = +new Date;
     require([
@@ -35,61 +24,92 @@
       'dom',
       'sprite',
       'entity',
-      'image!../resources/charsets.png'
+      'image!../resources/charsets.png',
+      'domReady!'
     ], function(lang, dom, Sprite, Entity, spriteSheet){
-      console.log("require callback: ", spriteSheet);
+
+      var canvas = document.getElementById('stage'),
+          ctx = canvas.getContext("2d");
+
+      console.log("require callback: ", ctx);
       
-      var commonState = { img: spriteSheet, w: 16, h: 18, offsetx: 0, frames: 3 };
+      var commonState = { img: spriteSheet, w: 16, h: 18, offsetx: 0, frames: 3, interval: 90 };
       var playerSprite = new Sprite({
         name: 'playerSprite',
         state: {
+          walkup: lang.mixin(Object.create(commonState), {
+            name: 'walkup', offsety: 180, 
+          }),
           walkright: lang.mixin(Object.create(commonState), {
-            name: 'walkright', offsety: 180, interval: 30
+            name: 'walkright', offsety: 198
+          }),
+          walkdown: lang.mixin(Object.create(commonState), {
+            name: 'walkdown', offsety: 216
+          }),
+          walkleft: lang.mixin(Object.create(commonState), {
+            name: 'walkleft', offsety: 234
+          }),
+          standing: lang.mixin(Object.create(commonState), {
+            name: 'standing', offsety: 216, frames: 1
           })
         }
       });
       var ent = window.player = new Entity("playerSprite", {
+        spriteState: 'standing',
         name: 'player',
         x: 10, y: 50, width: 16, height: 18,
-        render: function(){
-    			var canvas = document.getElementById('stage'),
-    				ctx = canvas.getContext("2d");
-    				ctx.clearRect( 0, 0, canvas.width, canvas.height );
-    				
-    			var ent = this, 
-    			    sprite = this.sprite, 
-    			    animFrame = this.spriteFrame;
-    			var drawArgs = [	  
-    			    sprite.img, 
-      			  sprite.offsetx + (animFrame * sprite.w),
-      			  sprite.offsety,
-      			  sprite.w,
-      			  sprite.h,
-      			  ent.x,ent.y,ent.width,ent.height
-      		];
-      		console.log("image,srcX,srcY,srcW,srcH,destX,destY,destW,destH");
-      		console.log(drawArgs);
-    			ctx.drawImage.apply(ctx, drawArgs);
+        render: function(ctx){
+            ctx.clearRect( 0, 0, canvas.width, canvas.height );
+            
+          var ent = this, 
+              sprite = this.sprite, 
+              animFrame = this.spriteFrame;
+          var drawArgs = [    
+              sprite.img, 
+              sprite.offsetx + (animFrame * sprite.w),
+              sprite.offsety,
+              sprite.w,
+              sprite.h,
+              ent.x,ent.y,ent.width,ent.height
+          ];
+          // console.log("image,srcX,srcY,srcW,srcH,destX,destY,destW,destH");
+          // console.log(drawArgs);
+          ctx.drawImage.apply(ctx, drawArgs);
         }
       });
       
       ent.init();
+      ent.update();
+      ent.render(ctx);
+
+      window.moveRight = function(){
+        player.spriteState = 'walkright';
+        player.x += 2;
+        player.update();
+        player.render(ctx);
+      };
+      window.moveLeft = function(){
+        player.spriteState = 'walkleft';
+        player.x -= 2;
+        player.update();
+        player.render(ctx);
+      };
+      var sequence = ['moveRight', 'moveLeft', 'moveRight', 'moveLeft'], 
+          pointer = 0, 
+          lastTick = +new Date(), 
+          stepTime = lastTick;
+      function tick(){
+        var now = +new Date();
+        if(now - stepTime >= 2000) {
+          pointer = (pointer >= sequence.length-1) ? 0 : pointer+1;
+          stepTime = now;
+        }
+        window[sequence[pointer]]();
+        lastTick = now;
+      }
+      var itv = window.itv = setInterval(tick, 1000/30);
     }); 
     
-    function moveRight(){
-      player.spriteState = 'walkright';
-      player.x += 2;
-      player.update();
-      console.log("frame: "+ player.spriteFrame);
-      player.render();
-    }
-    function moveLeft(){
-      player.spriteState = 'walkleft';
-      player.x -= 2;
-      player.update();
-      console.log("frame: "+ player.spriteFrame);
-      player.render();
-    }
   </script>
 </head>
 
