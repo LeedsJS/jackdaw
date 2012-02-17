@@ -33,7 +33,7 @@
 
       console.log("require callback: ", ctx);
       
-      var commonState = { img: spriteSheet, w: 16, h: 18, offsetx: 0, frames: 3, interval: 90 };
+      var commonState = { img: spriteSheet, w: 16, h: 18, offsetx: 0, frames: 3, interval: 120 };
       var playerSprite = new Sprite({
         name: 'playerSprite',
         state: {
@@ -57,20 +57,24 @@
       var ent = window.player = new Entity("playerSprite", {
         spriteState: 'standing',
         name: 'player',
-        x: 10, y: 50, width: 16, height: 18,
+        x: 10, y: 50, width: 32, height: 36,
         render: function(ctx){
-            ctx.clearRect( 0, 0, canvas.width, canvas.height );
-            
+          ctx.clearRect( 0, 0, canvas.width, canvas.height );
+
           var ent = this, 
               sprite = this.sprite, 
-              animFrame = this.spriteFrame;
+              animFrame = this.spriteFrame, 
+              img = sprite.img;
           var drawArgs = [    
-              sprite.img, 
-              sprite.offsetx + (animFrame * sprite.w),
-              sprite.offsety,
-              sprite.w,
-              sprite.h,
-              ent.x,ent.y,ent.width,ent.height
+              img,                                            // image
+              sprite.offsetx + (animFrame * sprite.w),        // source-x
+              sprite.offsety,                                 // source-y
+              sprite.w,                                       // source-width
+              sprite.h,                                       // source-height
+              ent.x,                                          // dest-x
+              ent.y,                                          // dest-y
+              ent.width,                                      // dest-width
+              ent.height                                      // dest-height
           ];
           // console.log("image,srcX,srcY,srcW,srcH,destX,destY,destW,destH");
           // console.log(drawArgs);
