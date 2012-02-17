@@ -82,6 +82,18 @@
       ent.update();
       ent.render(ctx);
 
+      window.moveUp = function(){
+        player.spriteState = 'walkup';
+        player.y -= 2;
+        player.update();
+        player.render(ctx);
+      };
+      window.moveDown = function(){
+        player.spriteState = 'walkdown';
+        player.y += 2;
+        player.update();
+        player.render(ctx);
+      };
       window.moveRight = function(){
         player.spriteState = 'walkright';
         player.x += 2;
@@ -94,7 +106,13 @@
         player.update();
         player.render(ctx);
       };
-      var sequence = ['moveRight', 'moveLeft', 'moveRight', 'moveLeft'], 
+      window.stopMoving = function(){
+        player.spriteState = 'standing';
+        player.update();
+        player.render(ctx);
+      };
+      
+      var sequence = ['moveRight', 'moveDown', 'moveLeft', 'moveUp', 'stopMoving'], 
           pointer = 0, 
           lastTick = +new Date(), 
           stepTime = lastTick;
