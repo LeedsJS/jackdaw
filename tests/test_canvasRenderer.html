@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Test Canvas Renderer</title>
+  <script>
+  // configure curl
+    curl = {
+      apiName: 'require',
+      baseUrl: '../lib',
+      pluginPath: '../lib/amd',
+      paths: {
+        curl: 'curl/src/curl',
+        tests: '../tests',
+        domReady: 'curl/src/curl/plugin/domReady'
+      }
+    };
+  </script>
+  <script src="../lib/curl/src/curl.js"></script>
+  <script>
+    var now = +new Date;
+    require([
+      'lang',
+      'dom',
+      'sprite',
+      'entity',
+      'canvasRenderer',
+      'image!../resources/charsets.png',
+      'domReady!'
+    ], function(lang, dom, Sprite, Entity, renderer, spriteSheet){
+
+
+      function degreesToRadians(degrees) {
+        return degrees * (Math.PI/180);
+      }
+      function radiansToDegrees(radians) {
+        return radians / (Math.PI/180);
+      }
+
+      function moveAroundPt(box, pt, radius) {
+        //if the degree variable is greater than 360, reset it
+        var oclock = box.degrees || 0;
+        
+        //increment the degree variable, , and then calculate the coordinates
+        box.degrees = oclock = (oclock >= 360) ? oclock-360 : oclock+1;
+
+        // need radians to feed into Math.cos / Math.sin
+        var radians = degreesToRadians(oclock), 
+            halfWidth = box.width/2, 
+            halfHeight = box.height/2;
+        box.x = pt.x - halfWidth - (radius * Math.cos(radians) );
+        box.y = pt.y - halfHeight - (radius * Math.sin(radians) );
+        return box;
+      }
+
+      renderer.canvasNode = document.getElementById('stage');
+      
+      var center = {
+        x: renderer.canvasNode.width/2,
+        y: renderer.canvasNode.height/2
+      };
+      
+      var scene = {
+        opaqueBox: {
+          x: center.x - 50, y: center.y - 50, width: 100, height: 100,
+          fill: true, // should be some value?
+          color: { b: 102 },
+          oclock: 0
+        },
+        translucentBox: {
+          x: center.x - 25, y: center.y - 25, width: 50, height: 50,
+          fill: true, // should be some value?
+          color: { r: 255, g: 255, b: 51, a: 0.5 }
+        },
+        boxes: [],
+        getRenderList: function(){
+         return [ this.opaqueBox ].concat(this.boxes);
+        }
+      };
+
+      // generate some boxes
+      scene.boxes = ("abcdefghijklmn").split('').map(function(name){
+        var box = Object.create( scene.translucentBox );
+        lang.mixin( box, {
+          name: 'box_'+name,
+          y: center.y - Math.floor(Math.random() * (center.y - box.height/2)),
+          degrees: 90
+        });
+        box.color = {
+          r: Math.random() * 255,
+          g: Math.random() * 255,
+          b: Math.random() * 255,
+          a: Math.random()
+        };
+        box.radius = Math.sqrt( Math.pow( center.x-box.x , 2) + Math.pow( center.y-box.y , 2) ); 
+        return box;
+      })
+
+      window.itv = setInterval(function(){
+        var box, 
+            radius = 0;
+        for(var i=0; i<scene.boxes.length; i++){
+          box = scene.boxes[i];
+          radius = box
+          moveAroundPt( scene.boxes[i], center, scene.boxes[i].radius );
+        }
+        renderer.render( scene );
+      }, 1000/60 );
+    }); 
+    
+  </script>
+</head>
+
+<body>
+
+  <canvas id="stage" width="800" height="400"></canvas>
+
+</body>
+</html>
