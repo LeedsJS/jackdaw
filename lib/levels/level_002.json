@@ -1,0 +1,105 @@
+{ 
+  entities : [
+    {
+      name: 'door', 
+      components: [
+        'collidable',
+        'portal',
+        'rect'
+      ]
+      x: 500, 
+      y: 300, 
+      width: 5, 
+      height: 40, 
+      destination: 'level_003',
+      color: {
+        r: 200,
+        g: 0,
+        b: 0
+      }
+    },
+    {
+      name: 'player',
+      components: [
+        'keyboardControl',
+        'collidable',
+        'moveable',
+        'rect'
+      ],
+      x: 20,
+      y: 20,
+      width: 10,
+      height: 10, 
+      speed: 3,
+      color: {
+        r: 200, 
+        g: 0,
+        b: 0
+      }
+    },
+    {
+      name: 'leftWall',
+      components: [
+        'collidable',
+        'rect'
+      ],
+      x: 20,
+      y: 20,
+      width: 10,
+      height: 400, 
+      color: {
+        r: 110, 
+        g: 110,
+        b: 110
+      }
+    },
+    {
+      name: 'rightWall',
+      components: [
+        'collidable',
+        'rect'
+      ],
+      x: 790,
+      y: 0,
+      width: 10,
+      height: 400, 
+      color: {
+        r: 110, 
+        g: 110,
+        b: 110
+      }
+    },
+    {
+      name: 'topWall',
+      components: [
+        'collidable',
+        'rect'
+      ],
+      x: 10,
+      y: 0,
+      width: 780,
+      height: 10, 
+      color: {
+        r: 110, 
+        g: 110,
+        b: 110
+      }
+    },
+    {
+      name: 'bottomWall',
+      components: [
+        'collidable',
+        'rect'
+      ],
+      x: 10,
+      y: 390,
+      width: 780,
+      height: 10, 
+      color: {
+        r: 110, 
+        g: 110,
+        b: 110
+      }
+    }
+  ]
+}
