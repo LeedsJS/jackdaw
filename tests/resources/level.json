@@ -1,0 +1,41 @@
+{
+  "entities" : [
+    {
+      "name": "door", 
+      "components": [
+        "collidable",
+        "portal",
+        "rect"
+      ],
+      "x": 500, 
+      "y": 300, 
+      "width": 5, 
+      "height": 40, 
+      "destination": "level_003",
+      "color": {
+        "r": 200,
+        "g": 0,
+        "b": 0
+      }
+    },
+    {
+      "name": "player",
+      "components": [
+        "keyboardControl",
+        "collidable",
+        "moveable",
+        "rect"
+      ],
+      "x": 20,
+      "y": 20,
+      "width": 10,
+      "height": 10, 
+      "speed": 3,
+      "color": {
+        "r": 200, 
+        "g": 0,
+        "b": 0
+      }
+    }
+  ]
+}

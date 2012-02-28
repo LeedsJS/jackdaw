@@ -8,9 +8,10 @@
 		curl = {
 			apiName: 'require',
 			baseUrl: '../lib',
-			pluginPath: '../lib/amd',
+			pluginPath: '../lib',
 			paths: {
 				curl: 'curl/src/curl',
+        'dollar': 'vendor/jquery-1.7',
 				tests: '../tests'
 			}
 		}
@@ -19,9 +20,9 @@
 	<script>
 		var now = +new Date;
 		require([
-			'image!tests/resources/icon.png',
-			'image!tests/resources/icon.png?' + now,
-			'image!tests/resources/notthere.png'
+			'amd/image!tests/resources/icon.png',
+			'amd/image!tests/resources/icon.png?' + now,
+			'amd/image!tests/resources/notthere.png'
 		], function(img1, img2, errImage){
 			console.log("require callback: ", arguments);
 		}); 
