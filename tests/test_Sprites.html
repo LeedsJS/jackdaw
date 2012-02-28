@@ -11,6 +11,7 @@
       pluginPath: '../lib/amd',
       paths: {
         curl: 'curl/src/curl',
+        'dollar': 'vendor/jquery-1.7',
         tests: '../tests',
         domReady: 'curl/src/curl/plugin/domReady'
       }
@@ -24,7 +25,7 @@
       'dom',
       'sprite',
       'entity',
-      'image!../resources/charsets.png',
+      'amd/image!../resources/charsets.png',
       'domReady!'
     ], function(lang, dom, Sprite, Entity, spriteSheet){
 
