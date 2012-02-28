@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Test Level Loader</title>
+  <script>
+  // configure curl
+    curl = {
+      apiName: 'require',
+      baseUrl: '../lib',
+      pluginPath: '../lib',
+      paths: {
+        curl: 'curl/src/curl',
+        dollar: 'vendor/jquery-1.7',
+        tests: '../tests',
+        domReady: 'curl/src/curl/plugin/domReady'
+      }
+    };
+  </script>
+  <script src="../lib/curl/src/curl.js"></script>
+  <script>
+    var now = +new Date;
+    
+    
+    require([
+      'dollar',
+      'domReady!'
+    ], function($){
+      var levelPath = '../tests/resources/level.json';
+      console.log("Lets load a level: ", levelPath);
+      require(['level!'+levelPath], function(level){
+        console.log("got level: ", level);
+        level.enter();
+        level.update();
+        level.exit();
+      });
+    }); 
+    
+  </script>
+</head>
+
+<body>
+
+  <h1>Level Loader</h1>
+  <p>(See console for output)</p>
+
+</body>
+</html>
