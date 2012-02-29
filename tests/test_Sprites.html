@@ -35,7 +35,7 @@
       console.log("require callback: ", ctx);
       
       // define some properties that all the states will share
-      var commonState = { img: spriteSheet, w: 16, h: 18, offsetx: 0, frames: 3, interval: 120 };
+      var commonState = { img: spriteSheet, width: 16, height: 18, offsetx: 0, frames: 3, interval: 120 };
       var playerSprite = new Sprite({
         name: 'playerSprite',
         state: {
@@ -77,10 +77,10 @@
           // the current frame in the current animation
           var drawArgs = [    
               img,                                            // image
-              sprite.offsetx + (animFrame * sprite.w),        // source-x
+              sprite.offsetx + (animFrame * sprite.width),        // source-x
               sprite.offsety,                                 // source-y
-              sprite.w,                                       // source-width
-              sprite.h,                                       // source-height
+              sprite.width,                                   // source-width
+              sprite.height,                                  // source-height
               ent.x,                                          // dest-x
               ent.y,                                          // dest-y
               ent.width,                                      // dest-width
