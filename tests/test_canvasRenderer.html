@@ -85,27 +85,32 @@
         lang.mixin( box, {
           name: 'box_'+name,
           y: center.y - Math.floor(Math.random() * (center.y - box.height/2)),
-          degrees: 90
+          degrees: 90,
+          color: {
+            r: Math.random() * 255,
+            g: Math.random() * 255,
+            b: Math.random() * 255,
+            a: Math.random()
+          },
+          label: name,
+          radius: Math.sqrt( Math.pow( center.x-box.x , 2) + Math.pow( center.y-box.y , 2) )
         });
-        box.color = {
-          r: Math.random() * 255,
-          g: Math.random() * 255,
-          b: Math.random() * 255,
-          a: Math.random()
-        };
-        box.radius = Math.sqrt( Math.pow( center.x-box.x , 2) + Math.pow( center.y-box.y , 2) ); 
         return box;
-      })
+      });
 
       window.itv = setInterval(function(){
         var box, 
             radius = 0;
         for(var i=0; i<scene.boxes.length; i++){
           box = scene.boxes[i];
-          radius = box
           moveAroundPt( scene.boxes[i], center, scene.boxes[i].radius );
         }
-        renderer.render( scene );
+        try {
+          renderer.render( scene.getRenderList() );
+        } catch(e){
+          console.error(e);
+          clearInterval(itv);
+        }
       }, 1000/60 );
     }); 
     
