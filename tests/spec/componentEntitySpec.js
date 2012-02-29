@@ -1,16 +1,16 @@
-define(['components', 'entity', 'component'], function(componentRegistry, Entity, Component){
+define(['entity', 'component'], function(Entity, Component){
 
   
   describe("component registry", function() {
     beforeEach(function(){
-      componentRegistry.empty();
+      Component.emptyRegistry();
     });
     
     it("should allow a component to be registered", function() {
       var registerException = null;
       // registry is (currently) just a plain dictionary object
       try {
-        componentRegistry.register({ name: 'testComponent' });
+        Component.register({ name: 'testComponent' });
       } catch(e) {
         registerException = e;
       }
@@ -19,8 +19,8 @@ define(['components', 'entity', 'component'], function(componentRegistry, Entity
     });
 
     it("should return a registered component given its name", function() {
-      componentRegistry.register({ name: 't2' });
-      var comp = componentRegistry.get('t2'); 
+      Component.register({ name: 't2' });
+      var comp = Component.get('t2'); 
       
       expect(comp).toBeTruthy();
       expect(comp.name).toBe('t2');
@@ -28,23 +28,23 @@ define(['components', 'entity', 'component'], function(componentRegistry, Entity
     });
 
     it("should empty itself cleanly", function() {
-      componentRegistry
+      Component
         .register({ name: 'r1'})
         .register({ name: 'r2'}); 
       
-      expect(componentRegistry.get('r1')).toBeTruthy();
-      expect(componentRegistry.get('r2')).toBeTruthy();
+      expect(Component.get('r1')).toBeTruthy();
+      expect(Component.get('r2')).toBeTruthy();
       
-      componentRegistry.empty();
+      Component.emptyRegistry();
       
-      expect(componentRegistry.get('r1')).toBeFalsy();
-      expect(componentRegistry.get('r2')).toBeFalsy();
+      expect(Component.get('r1')).toBeFalsy();
+      expect(Component.get('r2')).toBeFalsy();
     });
   });
 
   describe("entity is a class", function() {
     beforeEach(function(){
-      componentRegistry.empty();
+      Component.emptyRegistry();
     });
 
     it("should be a function", function() {
@@ -70,7 +70,7 @@ define(['components', 'entity', 'component'], function(componentRegistry, Entity
 
   describe("component", function() {
     beforeEach(function(){
-      componentRegistry.empty();
+      Component.emptyRegistry();
     });
 
     it("should throw without a name property", function(){
@@ -124,7 +124,7 @@ define(['components', 'entity', 'component'], function(componentRegistry, Entity
   
   describe("entity init", function() {
     beforeEach(function(){
-      componentRegistry.empty();
+      Component.emptyRegistry();
       var c1 = new Component({
         name: 'c1',
         attach: function(ent) {
@@ -150,7 +150,7 @@ define(['components', 'entity', 'component'], function(componentRegistry, Entity
 
   describe("entity lifecyle method", function() {
     beforeEach(function(){
-      componentRegistry.empty();
+      Component.emptyRegistry();
       var c1 = new Component({
         increment: 2,
         name: 'c1',

@@ -1,8 +1,8 @@
-define(['components', 'entity', 'component', 'sprite'], function(componentRegistry, Entity, Component, Sprite){
+define(['entity', 'component', 'sprite'], function(Entity, Component, Sprite){
   
   describe("sprite", function() {
     beforeEach(function(){
-      componentRegistry.empty();
+      Component.emptyRegistry();
     });
 
     it("should extend Component", function(){
