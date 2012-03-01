@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Test Keyboard Controls component</title>
+  <script>
+  // configure curl
+    curl = {
+      apiName: 'require',
+      baseUrl: '../lib',
+      pluginPath: '../lib',
+      paths: {
+        curl: 'curl/src/curl',
+        dollar: 'vendor/jquery-1.7',
+        tests: '../tests',
+        domReady: 'curl/src/curl/plugin/domReady'
+      }
+    };
+  </script>
+  <script src="../lib/curl/src/curl.js"></script>
+  <script>
+    require([
+      'dollar',
+      'entity',
+      'component',
+      'components/keyboardControls',
+      'domReady!'
+    ], function($, Entity, Component, keyboardControls){
+      
+      var echoKeys = Component.create({
+        name: 'echo-keys',
+        update: function(ent){
+          var keysList = Object.keys( ent.keysDown ).join(',');
+          if(keysList.length){
+            console.log(ent.keysDown, ent.keysDownMask);
+            $('#keysdown').val(keysList);
+            $('#keymask').val(ent.keysDownMask.toString(2) + '\t('+ent.keysDownMask+')');
+          }
+        }
+      })
+      var keytest = Entity.create([keyboardControls.name, echoKeys.name], { 
+        id: 'keytest'
+      });
+      keytest.init();
+      
+      window.itv = setInterval(function(){
+        try {
+          keytest.update();
+        } catch(e){
+          console.error("booong");
+          clearInterval(window.itv);
+        }
+      }, 1000/10 );
+
+    }); 
+    
+  </script>
+</head>
+
+<body>
+
+  <h1>Keyboard Controls</h1>
+  <p><input type="text" id="keysdown" readonly></p>
+  <p><input type="text" id="keymask" readonly></p>
+  <p><button onclick="clearInterval(itv)">stop</button></p>
+
+</body>
+</html>
